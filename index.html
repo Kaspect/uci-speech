@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trials Display</title>
+    <style>
+    .slide {
+        border: 1px solid black;
+        margin: 10px;
+        padding: 10px;
+    }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Patua+One&display=swap" rel="stylesheet">
+    <script src="helper_scripts.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.4.1/dist/css/glide.core.min.css">
+    <style>
+    #top_panel {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        background: #f7f3eb;
+    }
+
+    #main_body {
+
+        overflow: auto;
+    }
+
+    .video-container {
+        width: 500px;
+        height: 500px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .video-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+
+    .glide {
+        width: 80%;
+        margin: auto;
+    }
+
+    .glide__track {
+        overflow: hidden;
+    }
+
+    .glide__slides {
+        list-style: none;
+        padding: 0;
+    }
+
+    .glide__slide {
+        border: 1px solid black;
+        margin: 10px;
+        padding: 10px;
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .glide__slide p {
+        font-family: 'Patua One', sans-serif;
+    }
+
+
+    .glide__bullets {
+        text-align: center;
+    }
+
+    .glide__bullet {
+        background: #ccc;
+    }
+
+    .glide__bullet--active {
+        background: #333;
+    }
+
+
+
+    #top_panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="top_panel">
+        <div id="recording_module">
+            <div id="progressBar">
+                <div id="progressBarFilled">0%</div>
+            </div>
+            <div>
+                <video id="live" controls autoplay playsinline muted></video>
+                <div id="controls">
+                    <button id="rec" onclick="onBtnRecordClicked(); console.log('start' + Date.now().toString())">Record</button>
+                    <button id="stop" onclick="onBtnStopClicked(); console.log('end' + Date.now().toString())" disabled>Stop</button>
+                    <button id="myButton" onmouseup='beep();var button = document.getElementById("myButton");button.innerHTML = button.innerHTML + " ✅";'>Enable Sound Beeps</button>
+                    <button id="timesync" onmouseup='var button = document.getElementById("timesync");button.innerHTML = "unixtime" + syncbeep();'>Run Time-Sync Beep</button>
+                    <!-- <button id="stateButton" onclick="onStateClicked()">trace state</button> -->
+                </div>
+            </div>
+            <a id="downloadLink" download="mediarecorder.webm" name="mediarecorder.webm" href></a>
+            <details>
+                <summary>Advanced Logs</summary>
+                <p id="data">Log data will land here</p>
+            </details>
+            <script src="video_adapter_latest.js"></script>
+            <script src="video_main.js"></script>
+        </div>
+    </div>
+    <div id="main_body">
+        <div class="glide">
+            <div class="glide__track" data-glide-el="track">
+                <ul class="glide__slides" id="slides-container">
+                    <!-- Slides will be added here -->
+                </ul>
+            </div>
+            <div class="glide__bullets" data-glide-el="controls[nav]">
+                <!-- Bullets will be added here -->
+            </div>
+        </div>
+        <button onclick="downloadJSON(export_observations(), 'slide_observations_'+Date.now().toString()+'.json')">Download JSON for Slide Observations</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.4.1/dist/glide.min.js"></script>
+    <script>
+    // Your JSON data
+    var jsonData = {
+        "trials": {
+            "trial": [{
+                    "name": "Trial 01",
+                    "pluggedNose": "false",
+                    "challengeAmount": "1",
+                    "randomizeTrial": "false",
+                    "phrases": [{
+                            "text": "Thad took a bath",
+                            "imagePath": "https://raw.githubusercontent.com/Kaspect/ospeech-library/main/images/dog.png",
+                            "videoPath": "https://raw.githubusercontent.com/andreobvio/oSpeechXML/main/videos/Thad-took-a-bath.mp4",
+                            "imageCompanionPath": "null"
+                        },
+                        {
+                            "text": "Zip and zap the zipper",
+                            "imagePath": "null",
+                            "videoPath": "https://raw.githubusercontent.com/andreobvio/oSpeechXML/main/videos/Zip-and-zap-the-zipper.mp4",
+                            "imageCompanionPath": "null"
+                        },
+                        {
+                            "text": "Go get the wagon for the girl",
+                            "imagePath": "null",
+                            "videoPath": "https://raw.githubusercontent.com/andreobvio/oSpeechXML/main/videos/Go-get-the-wagon-for-the-girl.mp4",
+                            "imageCompanionPath": "null"
+                        }
+                    ]
+                },
+                {
+                    "name": "Trial 02",
+                    "pluggedNose": "true",
+                    "challengeAmount": "1",
+                    "randomizeTrial": "false",
+                    "phrases": [{
+                            "text": "Slow Pushups",
+                            "imagePath": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.womenshealthmag.com%2Ffitness%2Fa19934622%2Fpushup-fit-gif%2F&psig=AOvVaw20RvNkxXDBq0bKHN_aRvjT&ust=1706648186111000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJjpo4m-g4QDFQAAAAAdAAAAABAE",
+                            "videoPath": "https://static.videezy.com/system/resources/previews/000/005/959/original/20170307_220912.mp4",
+                            "imageCompanionPath": "https://static.videezy.com/system/resources/previews/000/005/959/original/20170307_220912.mp4"
+                        },
+                        {
+                            "text": "Kitty cut the cake",
+                            "imagePath": "https://raw.githubusercontent.com/andreobvio/oSpeechXML/main/images/plugnose.png",
+                            "videoPath": "https://raw.githubusercontent.com/andreobvio/oSpeechXML/main/videos/Kitty-cut-the-cake.mp4",
+                            "imageCompanionPath": "null"
+                        },
+                        {
+                            "text": "Push the button",
+                            "imagePath": "https://raw.githubusercontent.com/andreobvio/oSpeechXML/main/images/plugnose.png",
+                            "videoPath": "https://raw.githubusercontent.com/andreobvio/oSpeechXML/main/videos/Push-the-button.mp4",
+                            "imageCompanionPath": "null"
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+
+
+
+    const observations = [];
+
+    function createSlide(phrase, trialIndex, phraseIndex) {
+        var listItem = document.createElement('li');
+        listItem.className = 'glide__slide';
+
+        var indexText = document.createElement('div');
+        indexText.className = 'slide-index';
+        indexText.textContent = `Trial ${trialIndex + 1}, Phrase ${phraseIndex + 1}`;
+        listItem.appendChild(indexText);
+
+        var text = document.createElement('p');
+        text.textContent = phrase.text;
+        listItem.appendChild(text);
+
+        if (phrase.videoPath && phrase.videoPath !== "null") {
+            var videoContainer = document.createElement('div');
+            videoContainer.className = 'video-container';
+
+            var video = document.createElement('video');
+            video.src = phrase.videoPath;
+            video.controls = true;
+            videoContainer.appendChild(video);
+            listItem.appendChild(videoContainer);
+        }
+        //add primary image
+        if (phrase.imagePath && phrase.imagePath !== "null") {
+            var image = document.createElement('img');
+            image.src = phrase.imagePath;
+            listItem.appendChild(image);
+        }
+        //add secondary image
+        if (phrase.imageCompanionPath && phrase.imageCompanionPath !== "null") {
+            var companionImage = document.createElement('img');
+            companionImage.src = phrase.imageCompanionPath;
+            listItem.appendChild(companionImage);
+        }
+
+        return listItem;
+    }
+
+    function createTitleSlide(header_str, subtitle_str) {
+        var listItem = document.createElement('li');
+        listItem.className = 'glide__slide';
+
+        var indexText = document.createElement('div');
+        indexText.className = 'slide-index';
+        indexText.innerHTML = "<h1>" + header_str + "</h1>" + "<hr>" + "<h3>" + subtitle_str + "</h3>";
+        listItem.appendChild(indexText);
+        return listItem;
+    }
+
+    function export_observations() {
+        return (observations)
+    }
+
+    function downloadJSON(data, filename) {
+        var jsonString = JSON.stringify(data);
+        var blob = new Blob([jsonString], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+
+
+    function initializeCarousel() {
+        var slidesContainer = document.getElementById('slides-container');
+        slidesContainer.appendChild(createTitleSlide("FIRST SLIDE", "subtitle"))
+        jsonData.trials.trial.forEach((trial, trialIndex) => {
+            trial.phrases.forEach((phrase, phraseIndex) => {
+                slidesContainer.appendChild(createSlide(phrase, trialIndex, phraseIndex));
+            });
+        });
+        slidesContainer.appendChild(createTitleSlide("END SLIDE", "subtitle"))
+
+        var glide = new Glide('.glide', {
+            type: 'carousel',
+            perView: 1,
+            gap: 0
+        });
+
+        // Attach the beep function to the run.after event
+        glide.on('run.before', function() {
+            beep();
+            let transition_time = Date.now().toString()
+            let currentIndex = glide.index;
+            let myslideData = slidesContainer.children[currentIndex + 1].innerHTML
+            let content = { "unixtime_ms": transition_time, "slideData": myslideData, "slide_status": "END showing slide" }
+            observations.push(content)
+            console.log(`before, index is ${glide.index}; slide content is ${myslideData}`)
+        });
+
+        glide.on('run.after', function() {
+             let transition_time = Date.now().toString()
+            let currentIndex = glide.index;
+            let myslideData = slidesContainer.children[currentIndex + 1].innerHTML
+            let content = { "unixtime_ms": transition_time, "slideData": myslideData, "slide_status": "BEGIN showing slide" }
+            observations.push(content)
+            console.log(`before, index is ${glide.index}; slide content is ${myslideData}`)
+        });
+
+
+        glide.mount();
+
+
+    }
+
+    initializeCarousel();
+    </script>
+</body>
+
+</html>
